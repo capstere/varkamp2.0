@@ -3,16 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Femkamp Chiffer-utmaning</title>
+
+  <title>Femkamp Chiffer‑utmaning</title>
+
+  <!-- PWA‑manifest & ikon (valfritt) -->
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+
+  <!-- Din CSS -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- QR‑kod‑generator (för gåta 5) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
+
+  <!-- Header med titel och timer -->
   <header>
-    <h1>Femkamp: Chiffer-utmaning</h1>
+    <h1>Femkamp: Chiffer‑utmaning</h1>
     <div id="timer" aria-live="polite">00:00</div>
   </header>
+
+  <!-- Här mountas allt ditt gåte‑UI -->
   <main id="app"></main>
+
+  <!-- Ljud för rätt/fel svar -->
+  <audio id="audio-correct" src="assets/correct.mp3" preload="auto"></audio>
+  <audio id="audio-wrong"   src="assets/wrong.mp3"   preload="auto"></audio>
+
+  <!-- Slutligen: din bundlade JS‑kod -->
   <script src="bundle.js"></script>
+
 </body>
 </html>
