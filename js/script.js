@@ -306,7 +306,7 @@ function makeImg(src) {
     if (p.type==='prime') {
       const mins = Math.floor((Date.now() - startTime)/60000);
       if (!isPrime(mins)) {
-        msgEl.textContent = '⏳ Vänta till primtal-minut!';
+        msgEl.textContent = '⏳';
         return;
       }
       p.answer = String(mins);
@@ -392,14 +392,14 @@ function makeImg(src) {
     app.innerHTML = `
       <div class="card" id="final-form">
         <fieldset>
-          <legend>Dokumentera trädet</legend>
-          <label>1. Ta en gruppbild med trädet</label>
+          <legend>MÅL</legend>
+          <label>1. Ta en lagbild</label>
           <input type="file" id="photo" accept="image/*">
           <img id="preview" style="display:none;width:100%;margin-top:.5rem;border-radius:8px;">
-          <label>2. Trädets latinska namn</label>
+          <label>2. Ange en växt på latin</label>
           <input type="text" id="latin" placeholder="Ex: Quercus robur">
-          <label>3. Ditt lagnamn</label>
-          <input type="text" id="team" placeholder="Ex: Tigerlaget">
+          <label>3. Lagnamn</label>
+          <input type="text" id="team" placeholder="Ex: Gröna Laget">
           <button id="submit" disabled>Skicka</button>
         </fieldset>
       </div>
