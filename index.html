@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <!-- =============================================================
+       Meta & titelinformation
+  ============================================================= -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VÅRKAMP⁵</title>
+  <meta name="description" content="Ett interaktivt 11-delat utomhuspussel med ljud, stego, kryptologi och dokumentation.">
+  <meta name="theme-color" content="#3b682d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- =============================================================
+       PWA-manifest & scope
+  ============================================================= -->
+  <link rel="manifest" href="manifest.json">
+  <!-- Scope anges i manifest.json, men kan också specificeras här om du vill -->
+  <!-- <meta name="mobile-web-app-capable" content="yes"> -->
+
+  <!-- =============================================================
+       Favicon & Apple-touch-icon
+  ============================================================= -->
+  <link rel="icon" href="assets/icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="icon" href="assets/icons/play.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/icon-512.png">
+
+  <!-- =============================================================
+       Huvud-CSS
+  ============================================================= -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- ===================================================================
+       Wrapper för hela appen
+  =================================================================== -->
+  <div class="wrapper">
+
+    <!-- =================================================================
+         Header med titel, timer & progress-text
+    ================================================================= -->
+    <header>
+      <h1>VÅRKAMP<sup>5</sup></h1>
+      <div id="timer" aria-live="polite">00:00</div>
+      <div id="progress" aria-live="polite"></div>
+    </header>
+
+    <!-- =================================================================
+         Main – dynamiskt innehåll renderas via script.js
+    ================================================================= -->
+    <main id="app" role="main" aria-label="Spelvy"></main>
+
+    <!-- =================================================================
+         Botten-navigering Spela / Vår / Kamp / Hjälp
+    ================================================================= -->
+    <nav class="navbar" aria-label="Huvudnavigering">
+      <button id="nav-play" class="nav-btn active">
+        <img src="assets/icons/play.svg" alt="Spela">
+        <span>Spela</span>
+      </button>
+      <button id="nav-var" class="nav-btn disabled">
+        <img src="assets/icons/spring.svg" alt="Vår">
+        <span>Vår</span>
+      </button>
+      <button id="nav-kamp" class="nav-btn disabled">
+        <img src="assets/icons/fight.svg" alt="Kamp">
+        <span>Kamp</span>
+      </button>
+      <button id="nav-help" class="nav-btn disabled">
+        <img src="assets/icons/help.svg" alt="Hjälp">
+        <span>Hjälp</span>
+      </button>
+    </nav>
+
+    <!-- =================================================================
+         Modal för bildförstoring på Vår-fliken
+    ================================================================= -->
+    <div id="img-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-img">
+      <div class="modal-content">
+        <button id="modal-close" class="modal-close" aria-label="Stäng">&times;</button>
+        <img id="modal-img" src="" alt="Förstorad bild">
+      </div>
+    </div>
+
+  </div><!-- /.wrapper -->
+
+  <!-- ===================================================================
+       Noscript-varning
+  =================================================================== -->
+  <noscript>
+    <div class="noscript-warning">
+      ⚠️ JavaScript krävs för att sidan ska fungera.
+    </div>
+  </noscript>
+
+  <!-- ===================================================================
+       Ljudeffekter (preload)
+  =================================================================== -->
+  <audio id="audio-correct" src="assets/audio/correct.mp3" preload="auto"></audio>
+  <audio id="audio-wrong"   src="assets/audio/wrong.mp3"   preload="auto"></audio>
+  <audio id="audio-finish"  src="assets/audio/finish.mp3"  preload="auto"></audio>
+
+  <!-- ===================================================================
+       Huvud-JavaScript
+  =================================================================== -->
+  <script defer src="js/script.js"></script>
+
+  <!-- ===================================================================
+       Service Worker & update-banner
+  =================================================================== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => {
+            if (reg.waiting) showUpdate(reg);
+            reg.addEventListener('updatefound', () => {
+              const installing = reg.installing;
+              installing.addEventListener('statechange', () => {
+                if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                  showUpdate(reg);
+                }
+              });
+            });
+          })
+          .catch(()=>{});
+      });
+      navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
+    }
+    function showUpdate(reg) {
+      const banner = document.createElement('div');
+      banner.className = 'update-banner';
+      banner.innerHTML = `Ny version finns! <button id="upd">Uppdatera</button>`;
+      document.body.appendChild(banner);
+      banner.querySelector('#upd').onclick = () => {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      };
+    }
+  </script>
+</body>
+</html>
